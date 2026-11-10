@@ -1,0 +1,64 @@
+{
+  "_note": "All the numbers the calculator uses. Change a number here, not in the code. Prices and timings are placeholders: replace them with real measurements and current cloud prices.",
+
+  "settings": {
+    "usable_share_of_machine": 0.65,
+    "startup_hours_per_machine": 0.2,
+    "max_machines_per_pool": 200,
+    "raw_gb_per_video_hour": 1.0,
+    "derived_gb_per_video_hour": 0.25,
+    "keep_months": 12
+  },
+
+  "stages": {
+    "decode_transcode":     {"machine": "cpu", "seconds_per_video_hour": 300},
+    "shot_segmentation":    {"machine": "gpu", "seconds_per_video_hour": 90},
+    "frame_embedding":      {"machine": "gpu", "seconds_per_video_hour": 40},
+    "speech_to_text":       {"machine": "gpu", "seconds_per_video_hour": 150},
+    "screen_text_reading":  {"machine": "gpu", "seconds_per_video_hour": 60},
+    "build_search_index":   {"machine": "cpu", "seconds_per_video_hour": 120}
+  },
+
+  "video_types": {
+    "meeting":                  {"share": 0.35, "factors": {"screen_text_reading": 0.0}},
+    "meeting_with_screen_share":{"share": 0.15, "factors": {}},
+    "surveillance":             {"share": 0.25, "factors": {"speech_to_text": 0.0, "frame_embedding": 0.5, "screen_text_reading": 0.0}},
+    "sports":                   {"share": 0.12, "factors": {"screen_text_reading": 0.0}},
+    "concert":                  {"share": 0.08, "factors": {"speech_to_text": 0.5, "screen_text_reading": 0.0}},
+    "gameplay":                 {"share": 0.05, "factors": {"speech_to_text": 0.1}}
+  },
+
+  "clouds": {
+    "aws": {
+      "gpu": {"name": "g5.xlarge (A10G)", "gpus": 1, "price_per_hour": 1.006},
+      "gpu_relative_speed": 1.0,
+      "cpu": {"name": "c6i.4xlarge", "vcpus": 16, "price_per_hour": 0.68},
+      "control_plane_per_hour": 0.10,
+      "storage_per_gb_month": 0.023,
+      "egress_per_gb": 0.09
+    },
+    "gcp": {
+      "gpu": {"name": "g2-standard-4 (L4)", "gpus": 1, "price_per_hour": 0.71},
+      "gpu_relative_speed": 1.0,
+      "cpu": {"name": "c2-standard-16", "vcpus": 16, "price_per_hour": 0.84},
+      "control_plane_per_hour": 0.10,
+      "storage_per_gb_month": 0.020,
+      "egress_per_gb": 0.12
+    },
+    "azure": {
+      "gpu": {"name": "NC4as_T4_v3 (T4)", "gpus": 1, "price_per_hour": 0.526},
+      "gpu_relative_speed": 0.5,
+      "cpu": {"name": "D16as_v5", "vcpus": 16, "price_per_hour": 0.704},
+      "control_plane_per_hour": 0.10,
+      "storage_per_gb_month": 0.018,
+      "egress_per_gb": 0.087
+    }
+  },
+
+  "environments": {
+    "dev":     {"clusters": 1, "baseline_nodes": 2, "foundational_services_monthly": 1500},
+    "qa":      {"clusters": 1, "baseline_nodes": 3, "foundational_services_monthly": 2500},
+    "preprod": {"clusters": 1, "baseline_nodes": 4, "foundational_services_monthly": 4000},
+    "prod":    {"clusters": 2, "baseline_nodes": 8, "foundational_services_monthly": 9000}
+  }
+}

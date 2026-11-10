@@ -1,0 +1,16 @@
+# Fill this in before you submit -- our evaluator runs these commands
+# EXACTLY as written, in this order, from a fresh checkout of your fork.
+# Keep every command non-interactive (no prompts) and idempotent.
+
+setup_commands:
+  - "python3 -c \"import sys; assert sys.version_info >= (3, 9)\""
+
+run_commands:
+  - "python src/main.py --help"
+  - "python src/main.py estimate --corpus-hours 2000 --budget-hours 72 --provider aws --env prod"
+  - "python src/main.py sweep --env prod --out results/sweep.csv"
+
+test_commands:
+  - "python -m unittest discover -s src/tests -v"
+
+notes: "Python 3.9+, standard library only. Setup only checks the Python version because the system pip is externally managed and there is nothing to install. Pricing and stage timings in src/config.json are illustrative placeholders, not live quotes. Sweep writes 63 scenarios to results/sweep.csv (about 1 second)."
